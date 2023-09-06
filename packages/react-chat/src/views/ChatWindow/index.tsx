@@ -1,17 +1,18 @@
 import '../../styles.css';
 
-import React, { useCallback } from 'react';
-import * as R from 'remeda';
-import { match } from 'ts-pattern';
+import React, { useCallback, useContext } from 'react';
 
 import { Assistant, ChatConfig, Listeners, PostMessage, SessionOptions, SessionStatus, useTheme } from '@/common';
-import { Chat, SystemResponse, UserResponse } from '@/components';
+import { Chat, UserResponse, SystemResponse } from '@/components';
 import { RuntimeAPIProvider } from '@/contexts';
-import { FeedbackName, useRuntime } from '@/hooks';
 import { TurnType, UserTurnProps } from '@/types';
 
+import LiveAgentStatus from '../../components/LiveAgentStatus';
+import { RuntimeContext } from '../../context';
+import { useLiveAgent } from '../../use-live-agent.hook';
 import { ChatWindowContainer } from './styled';
 import { sendMessage } from './utils';
+import { match } from 'ts-pattern';
 
 const ChatWindow: React.FC<ChatConfig & { assistant: Assistant; session: SessionOptions }> = ({
   assistant,
@@ -25,7 +26,8 @@ const ChatWindow: React.FC<ChatConfig & { assistant: Assistant; session: Session
   const close = useCallback(() => sendMessage({ type: PostMessage.Type.CLOSE }), []);
   const saveSession = useCallback((session: SessionOptions) => sendMessage({ type: PostMessage.Type.SAVE_SESSION, payload: session }), []);
 
-  const runtime = useRuntime({ versionID, verify, url, user, session, saveSession }, [verify.projectID]);
+  const { runtime } = useContext(RuntimeContext)!;
+  const liveAgent = useLiveAgent();
 
   // listeners
   Listeners.useListenMessage(PostMessage.Type.INTERACT, ({ payload }) => runtime.interact(payload));
@@ -37,6 +39,14 @@ const ChatWindow: React.FC<ChatConfig & { assistant: Assistant; session: Session
 
   const handleStart = async (): Promise<void> => {
     await runtime.launch();
+  };
+
+  const handleSend = (message: string, attachmentUrls) => {
+    if (liveAgent.isEnabled) {
+      liveAgent.sendUserReply(message, attachmentUrls);
+    } else {
+      runtime.reply(message);
+    }
   };
 
   const closeAndEnd = useCallback((): void => {
@@ -68,25 +78,20 @@ const ChatWindow: React.FC<ChatConfig & { assistant: Assistant; session: Session
           isLoading={!runtime.session.turns.length}
           onStart={handleStart}
           onEnd={closeAndEnd}
-          onSend={runtime.reply}
+          onSend={handleSend}
           onMinimize={close}
+          isLiveAgentEnabled={liveAgent.isEnabled}
+          liveAgent={liveAgent}
         >
+          {liveAgent.isEnabled && <LiveAgentStatus talkToRobot={liveAgent.talkToRobot} />}
           {runtime.session.turns.map((turn, turnIndex) =>
             match(turn)
-              .with({ type: TurnType.USER }, ({ id, ...props }) => <UserResponse {...R.omit(props, ['type'])} key={id} />)
-              .with({ type: TurnType.SYSTEM }, ({ id, ...props }) => (
+              .with({ type: TurnType.USER }, ({ id, ...rest }) => <UserResponse {...rest} key={id} />)
+              .with({ type: TurnType.SYSTEM }, ({ id, ...rest }) => (
                 <SystemResponse
+                  {...rest}
                   key={id}
-                  {...R.omit(props, ['type'])}
-                  feedback={
-                    assistant.feedback
-                      ? {
-                          onClick: (feedback: FeedbackName) => {
-                            runtime.feedback(feedback, props.messages, getPreviousUserTurn(turnIndex));
-                          },
-                        }
-                      : undefined
-                  }
+                  Message={({ message, ...props }) => <SystemResponse.SystemMessage {...props} message={message} />}
                   avatar={assistant.avatar}
                   isLast={turnIndex === runtime.session.turns.length - 1}
                 />

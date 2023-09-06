@@ -8,7 +8,8 @@ export const Container = styled(tag('div'), {
   display: 'inline-flex',
   alignItems: 'center',
   boxSizing: 'border-box',
-  marginTop: '8.5px',
+  margin: '5px 15px 0 0',
+  justifyContent: 'start',
 });
 
 export const Description = styled(tag('div', 'description'), {

@@ -9,6 +9,7 @@ import { AutoScrollProvider } from '@/contexts';
 import { Nullish } from '@/types';
 import { chain } from '@/utils/functional';
 
+import SettingsScreen from '../SettingsScreen';
 import { useTimestamp } from './hooks';
 import { Container, Dialog, Overlay, SessionTime, Spacer, Status } from './styled';
 
@@ -42,6 +43,8 @@ export interface ChatProps extends HeaderProps, AssistantInfoProps, FooterProps,
    * A callback that is executed when the conversation ends.
    */
   onEnd?: React.MouseEventHandler<HTMLButtonElement>;
+
+  liveAgent: any;
 }
 
 const Chat: React.FC<ChatProps> = ({
@@ -58,10 +61,13 @@ const Chat: React.FC<ChatProps> = ({
   onStart,
   onSend,
   children,
+  isLiveAgentEnabled,
+  liveAgent,
 }) => {
   const timestamp = useTimestamp(startTime);
   const dialogRef = useRef<HTMLElement>(null);
   const [hasAlert, setAlert] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const handleClose = (event: React.MouseEvent<HTMLButtonElement>): void => {
     if (hasEnded) {
@@ -70,6 +76,15 @@ const Chat: React.FC<ChatProps> = ({
       setAlert(true);
     }
   };
+
+  const handleOpenSettings = () => {
+    setIsSettingsOpen(true);
+  };
+
+  const handleCloseSettings = () => {
+    setIsSettingsOpen(false);
+  };
+
   const handleResume = (): void => setAlert(false);
 
   if (isLoading) {
@@ -86,11 +101,14 @@ const Chat: React.FC<ChatProps> = ({
         title={title}
         image={image}
         actions={[
+          { svg: 'settings', onClick: handleOpenSettings },
           { svg: 'minus', onClick: onMinimize },
           { svg: 'close', onClick: handleClose },
         ]}
       />
       <Dialog ref={dialogRef}>
+        {isSettingsOpen && <SettingsScreen {...{ onStart, handleResume, handleCloseSettings }} />}
+
         <AutoScrollProvider target={dialogRef}>
           <AssistantInfo title={title} avatar={avatar} description={description} />
           <Spacer />
@@ -99,7 +117,15 @@ const Chat: React.FC<ChatProps> = ({
           {hasEnded && <Status>You have ended the chat</Status>}
         </AutoScrollProvider>
       </Dialog>
-      <Footer withWatermark={withWatermark} hasEnded={hasEnded} onStart={onStart} onSend={onSend} />
+
+      <Footer
+        withWatermark={withWatermark}
+        hasEnded={hasEnded}
+        onStart={onStart}
+        onSend={onSend}
+        isLiveAgentEnabled={isLiveAgentEnabled}
+        liveAgent={liveAgent}
+      />
       <Overlay />
       <Prompt accept={{ label: 'End Chat', type: 'warn', onClick: chain(onEnd, handleResume) }} cancel={{ label: 'Cancel', onClick: handleResume }} />
     </Container>

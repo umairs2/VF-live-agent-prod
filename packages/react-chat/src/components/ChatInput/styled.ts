@@ -35,6 +35,7 @@ export const ButtonContainer = styled(tag('label', 'button'), {
 
 export const Container = styled(tag('div'), {
   display: 'flex',
+  alignItems: 'center',
   boxShadow: '0 1px 12px $shadow2',
   trans: ['border-color', 'box-shadow'],
 
@@ -64,5 +65,37 @@ export const Container = styled(tag('div'), {
   [`& ${Input.Container}:focus + ${ButtonContainer}`]: {
     ...inputFocusStyles,
     borderLeftWidth: 0,
+  },
+});
+
+export const FileInputLabel = styled('label', {
+  position: 'relative',
+  display: 'inline-block',
+
+  '&:hover': {
+    cursor: 'pointer',
+  },
+});
+
+export const FileInput = styled('input', {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  opacity: 0,
+
+  '&:hover': {
+    cursor: 'pointer',
+  },
+});
+
+export const AttachmentIcon = styled('img', {
+  marginRight: '7px',
+  width: '25px',
+  height: '25px',
+
+  '&:hover': {
+    cursor: 'pointer',
   },
 });

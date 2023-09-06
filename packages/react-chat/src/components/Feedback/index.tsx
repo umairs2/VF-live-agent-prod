@@ -16,7 +16,7 @@ export interface FeedbackProps extends React.PropsWithChildren {
   onClick: (feedback: FeedbackName) => void;
 }
 
-const Feedback: React.FC<FeedbackProps> = ({ question = 'Was this helpful?', onClick, ...props }) => {
+const Feedback: React.FC<FeedbackProps> = ({ question = '', onClick, ...props }) => {
   const [active, setActive] = React.useState<FeedbackName | null>(null);
 
   const handleClick = (feedback: FeedbackName) => {
