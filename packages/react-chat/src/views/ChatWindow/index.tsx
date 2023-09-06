@@ -13,6 +13,8 @@ import { useLiveAgent } from '../../use-live-agent.hook';
 import { ChatWindowContainer } from './styled';
 import { sendMessage } from './utils';
 import { match } from 'ts-pattern';
+import i18n from '../../utils/i18n';
+import { I18nextProvider } from 'react-i18next';
 
 const ChatWindow: React.FC<ChatConfig & { assistant: Assistant; session: SessionOptions }> = ({
   assistant,
@@ -65,43 +67,45 @@ const ChatWindow: React.FC<ChatConfig & { assistant: Assistant; session: Session
   );
 
   return (
-    <RuntimeAPIProvider {...runtime}>
-      <ChatWindowContainer className={theme}>
-        <Chat
-          title={assistant.title}
-          description={assistant.description}
-          image={assistant.image}
-          avatar={assistant.avatar}
-          withWatermark={assistant.watermark}
-          startTime={runtime.session.startTime}
-          hasEnded={runtime.isStatus(SessionStatus.ENDED)}
-          isLoading={!runtime.session.turns.length}
-          onStart={handleStart}
-          onEnd={closeAndEnd}
-          onSend={handleSend}
-          onMinimize={close}
-          isLiveAgentEnabled={liveAgent.isEnabled}
-          liveAgent={liveAgent}
-        >
-          {liveAgent.isEnabled && <LiveAgentStatus talkToRobot={liveAgent.talkToRobot} />}
-          {runtime.session.turns.map((turn, turnIndex) =>
-            match(turn)
-              .with({ type: TurnType.USER }, ({ id, ...rest }) => <UserResponse {...rest} key={id} />)
-              .with({ type: TurnType.SYSTEM }, ({ id, ...rest }) => (
-                <SystemResponse
-                  {...rest}
-                  key={id}
-                  Message={({ message, ...props }) => <SystemResponse.SystemMessage {...props} message={message} />}
-                  avatar={assistant.avatar}
-                  isLast={turnIndex === runtime.session.turns.length - 1}
-                />
-              ))
-              .exhaustive()
-          )}
-          {runtime.indicator && <SystemResponse.Indicator avatar={assistant.avatar} />}
-        </Chat>
-      </ChatWindowContainer>
-    </RuntimeAPIProvider>
+    <I18nextProvider i18n={i18n}>
+      <RuntimeAPIProvider {...runtime}>
+        <ChatWindowContainer className={theme}>
+          <Chat
+            title={assistant.title}
+            description={assistant.description}
+            image={assistant.image}
+            avatar={assistant.avatar}
+            withWatermark={assistant.watermark}
+            startTime={runtime.session.startTime}
+            hasEnded={runtime.isStatus(SessionStatus.ENDED)}
+            isLoading={!runtime.session.turns.length}
+            onStart={handleStart}
+            onEnd={closeAndEnd}
+            onSend={handleSend}
+            onMinimize={close}
+            isLiveAgentEnabled={liveAgent.isEnabled}
+            liveAgent={liveAgent}
+          >
+            {liveAgent.isEnabled && <LiveAgentStatus talkToRobot={liveAgent.talkToRobot} />}
+            {runtime.session.turns.map((turn, turnIndex) =>
+              match(turn)
+                .with({ type: TurnType.USER }, ({ id, ...rest }) => <UserResponse {...rest} key={id} />)
+                .with({ type: TurnType.SYSTEM }, ({ id, ...rest }) => (
+                  <SystemResponse
+                    {...rest}
+                    key={id}
+                    Message={({ message, ...props }) => <SystemResponse.SystemMessage {...props} message={message} />}
+                    avatar={assistant.avatar}
+                    isLast={turnIndex === runtime.session.turns.length - 1}
+                  />
+                ))
+                .exhaustive()
+            )}
+            {runtime.indicator && <SystemResponse.Indicator avatar={assistant.avatar} />}
+          </Chat>
+        </ChatWindowContainer>
+      </RuntimeAPIProvider>
+    </I18nextProvider>
   );
 };
 
