@@ -8,6 +8,7 @@ import { CalendarTrace } from './traces/calendar.trace';
 import { FileUploadTrace } from './traces/file-upload.trace';
 import { TalkToAgentTrace } from './traces/talk-to-agent.trace';
 import { VideoTrace } from './traces/video.trace';
+import { SetConfigTrace } from './traces/set-config-trace';
 
 export interface RuntimeEvents {
   live_agent: (platform: LiveAgentPlatform) => void;
@@ -29,7 +30,14 @@ export const RuntimeProvider: React.FC<React.PropsWithChildren> = ({ children })
   const runtime = useRuntime({
     verify: { authorization: key },
     session: { userID: `anonymous-${Math.random()}` },
-    traces: [AccountInfoTrace, FileUploadTrace, CalendarTrace, VideoTrace, TalkToAgentTrace((platform) => emitter.emit('live_agent', platform))],
+    traces: [
+      AccountInfoTrace,
+      FileUploadTrace,
+      SetConfigTrace,
+      CalendarTrace,
+      VideoTrace,
+      TalkToAgentTrace((platform) => emitter.emit('live_agent', platform)),
+    ],
   });
 
   const subscribe = (event: keyof RuntimeEvents, callback: (data?: any) => void) => emitter.on(event, callback);
