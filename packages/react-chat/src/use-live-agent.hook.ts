@@ -9,6 +9,7 @@ import { TurnType, UserTurnProps } from '@/types';
 import { LiveAgentPlatform } from '../../../shared/live-agent-platform.enum';
 import { SocketEvent } from '../../../shared/socket-event.enum';
 import { RuntimeContext } from './context';
+import { RuntimeAPIContext } from '@/contexts';
 
 const SESSION_USER_ID_KEY = 'session:user_id';
 const SESSION_CONVERSATION_ID_KEY = 'session:conversation_id';
@@ -43,7 +44,9 @@ export const useLiveAgent = () => {
   const socketRef = useRef<WebSocket | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const [isEnabled, setEnabled] = useState(false);
-  const { runtime, subscribe } = useContext(RuntimeContext)!;
+
+  //const { runtime, subscribe } = useContext(RuntimeContext)!;
+  const { runtime, subscribe } = useContext(RuntimeAPIContext);
 
   const addSystemMessage = (message: string) =>
     runtime.addTurn({

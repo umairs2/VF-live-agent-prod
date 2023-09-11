@@ -8,13 +8,14 @@ import { RuntimeAPIProvider } from '@/contexts';
 import { TurnType, UserTurnProps } from '@/types';
 
 import LiveAgentStatus from '../../components/LiveAgentStatus';
-import { RuntimeContext } from '../../context';
+//import { RuntimeContext } from '../../context';
 import { useLiveAgent } from '../../use-live-agent.hook';
 import { ChatWindowContainer } from './styled';
 import { sendMessage } from './utils';
 import { match } from 'ts-pattern';
 import i18n from '../../utils/i18n';
 import { I18nextProvider } from 'react-i18next';
+import { useRuntime } from '@/hooks';
 
 const ChatWindow: React.FC<ChatConfig & { assistant: Assistant; session: SessionOptions }> = ({
   assistant,
@@ -28,7 +29,9 @@ const ChatWindow: React.FC<ChatConfig & { assistant: Assistant; session: Session
   const close = useCallback(() => sendMessage({ type: PostMessage.Type.CLOSE }), []);
   const saveSession = useCallback((session: SessionOptions) => sendMessage({ type: PostMessage.Type.SAVE_SESSION, payload: session }), []);
 
-  const { runtime } = useContext(RuntimeContext)!;
+  //const { runtime } = useContext(RuntimeContext)!;
+  const runtime = useRuntime({ versionID, verify, url, user, session, saveSession }, [verify.projectID]);
+
   const liveAgent = useLiveAgent();
 
   // listeners

@@ -3,6 +3,7 @@ import { ActionType, RuntimeAction, Trace, TraceDeclaration, VoiceflowRuntime } 
 import { serializeToText } from '@voiceflow/slate-serializer/text';
 import Bowser from 'bowser';
 import cuid from 'cuid';
+import { createNanoEvents } from 'nanoevents';
 import { useEffect, useMemo, useState } from 'react';
 
 import { RuntimeOptions, SendMessage, SessionOptions, SessionStatus } from '@/common';
@@ -13,6 +14,7 @@ import { MESSAGE_TRACES, RuntimeContext } from '@/runtime';
 import { TurnProps, TurnType, UserTurnProps } from '@/types';
 import { handleActions } from '@/utils/actions';
 
+import { TalkToAgentTrace } from '../traces/talk-to-agent.trace';
 import { useStateRef } from './useStateRef';
 
 const createContext = (): RuntimeContext => ({
@@ -45,6 +47,7 @@ export const useRuntime = ({ url = RUNTIME_URL, versionID, verify, user, ...conf
   const [session, setSession, sessionRef] = useStateRef<Required<SessionOptions>>({ ...DEFAULT_RUNTIME_STATE, ...config.session });
   const [lastInteractionAt, setLastInteractionAt] = useState<number | null>(Date.now());
   const [noReplyTimeout, setNoReplyTimeout] = useState<number | null>(null);
+  const emitter = useMemo(() => createNanoEvents<RuntimeEvents>(), []);
 
   useEffect(() => {
     let noReplyTimer: NodeJS.Timeout | undefined;
@@ -78,6 +81,8 @@ export const useRuntime = ({ url = RUNTIME_URL, versionID, verify, user, ...conf
         traces: [
           ...(config.traces ?? []),
           ...MESSAGE_TRACES,
+          TalkToAgentTrace((platform) => emitter.emit('live_agent', platform)),
+
           {
             canHandle: ({ type }) => type === Trace.TraceType.NO_REPLY,
             handle: ({ context }, _trace) => {

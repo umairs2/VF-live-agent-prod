@@ -14,7 +14,8 @@ export interface RuntimeEvents {
   live_agent: (platform: LiveAgentPlatform) => void;
 }
 
-const key = import.meta.env.VF_DM_API_KEY || 'VF.DM.64f054ecd52233000786e825.hMxWDE2zg5Kz0KCg';
+const key = import.meta.env.VF_DM_API_KEY;
+
 console.log(key);
 
 export interface RuntimeContextValue {

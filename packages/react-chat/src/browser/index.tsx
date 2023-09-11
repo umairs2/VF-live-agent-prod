@@ -28,11 +28,7 @@ Listeners.context.listeners.push(fetchAssistant);
 const initialize: Listeners.MessageListener<PostMessage.Type.SESSION> = {
   type: PostMessage.Type.SESSION,
   action: async ({ payload }) => {
-    root.render(
-      <RuntimeProvider>
-        <ChatWidget {...payload} />
-      </RuntimeProvider>
-    );
+    root.render(<ChatWidget {...payload} />);
   },
 };
 
