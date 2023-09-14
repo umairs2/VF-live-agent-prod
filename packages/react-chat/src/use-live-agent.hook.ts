@@ -40,13 +40,13 @@ const extractHistory = (runtime: ReturnType<typeof useRuntime>) => {
   );
 };
 
-export const useLiveAgent = () => {
+export const useLiveAgent = (runtime: any) => {
   const socketRef = useRef<WebSocket | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const [isEnabled, setEnabled] = useState(false);
 
   //const { runtime, subscribe } = useContext(RuntimeContext)!;
-  const { runtime, subscribe } = useContext(RuntimeAPIContext);
+  //const { runtime, subscribe } = useContext(RuntimeAPIContext);
 
   const addSystemMessage = (message: string) =>
     runtime.addTurn({
@@ -130,7 +130,7 @@ export const useLiveAgent = () => {
 
   useEffect(() => () => clearTimeout(timeoutRef.current), []);
 
-  useEffect(() => subscribe('live_agent', talkToAgent), [talkToAgent]);
+  useEffect(() => runtime.subscribe('live_agent', talkToAgent), [talkToAgent]);
 
   return {
     isEnabled,

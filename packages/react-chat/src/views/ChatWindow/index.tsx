@@ -32,7 +32,7 @@ const ChatWindow: React.FC<ChatConfig & { assistant: Assistant; session: Session
   //const { runtime } = useContext(RuntimeContext)!;
   const runtime = useRuntime({ versionID, verify, url, user, session, saveSession }, [verify.projectID]);
 
-  const liveAgent = useLiveAgent();
+  const liveAgent = useLiveAgent(runtime);
 
   // listeners
   Listeners.useListenMessage(PostMessage.Type.INTERACT, ({ payload }) => runtime.interact(payload));

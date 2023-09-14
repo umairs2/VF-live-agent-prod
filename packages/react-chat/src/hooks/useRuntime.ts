@@ -16,6 +16,7 @@ import { handleActions } from '@/utils/actions';
 
 import { TalkToAgentTrace } from '../traces/talk-to-agent.trace';
 import { useStateRef } from './useStateRef';
+import { LiveAgentPlatform } from '../../../../shared/live-agent-platform.enum';
 
 const createContext = (): RuntimeContext => ({
   messages: [],
@@ -38,6 +39,14 @@ const DEFAULT_RUNTIME_STATE: Required<SessionOptions> = {
   startTime: Date.now(),
   status: SessionStatus.IDLE,
 };
+
+export interface RuntimeEvents {
+  live_agent: (platform: LiveAgentPlatform) => void; // Assuming LiveAgentPlatform is imported or defined elsewhere
+}
+
+export interface RuntimeAPIContext extends Pick<ReturnType<typeof useRuntime>, 'send' | 'setStatus'> {
+  subscribe: <K extends keyof RuntimeEvents>(event: K, callback: RuntimeEvents[K]) => void;
+}
 
 /**
  * A wrapper for the Voiceflow runtime client.
@@ -98,6 +107,8 @@ export const useRuntime = ({ url = RUNTIME_URL, versionID, verify, user, ...conf
       }),
     dependencies
   );
+
+  const subscribe = (event: keyof RuntimeEvents, callback: (data?: any) => void) => emitter.on(event, callback);
 
   const setTurns = (action: (turns: TurnProps[]) => TurnProps[]) => {
     setSession((prev) => ({ ...prev, turns: action(prev.turns) }));
@@ -213,5 +224,6 @@ export const useRuntime = ({ url = RUNTIME_URL, versionID, verify, user, ...conf
     setStatus,
     isStatus,
     addTurn,
+    subscribe,
   };
 };
