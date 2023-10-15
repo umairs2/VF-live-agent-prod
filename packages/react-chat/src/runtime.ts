@@ -8,6 +8,8 @@ import {
   VisualTraceComponent,
 } from '@voiceflow/sdk-runtime';
 
+import { CustomMessage } from './custom-message.enum';
+
 import type { SystemResponseProps } from './components/SystemResponse';
 import { MessageType } from './components/SystemResponse/constants';
 
@@ -65,6 +67,18 @@ export const MESSAGE_TRACES: TraceDeclaration<RuntimeContext, any>[] = [
     canHandle: ({ type }) => type === Trace.TraceType.END,
     handle: ({ context }) => {
       context.messages.push({ type: MessageType.END });
+      return context;
+    },
+  },
+  {
+    canHandle: ({ type }) => type === 'file_upload',
+    handle: ({ context }, trace) => {
+      console.log(JSON.parse(trace.payload));
+
+      context.messages.push({
+        type: CustomMessage.FILE_UPLOAD,
+        googleCreds: JSON.parse(trace.payload),
+      });
       return context;
     },
   },

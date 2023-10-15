@@ -17,7 +17,8 @@ export interface DefaultTextProps {
   onFileUploaded?: (url: string) => void; // Callback for when file is uploaded
 }
 
-const FileUpload: React.FC<DefaultTextProps> = ({ text, onFileUploaded }) => {
+const FileUpload: React.FC<DefaultTextProps> = ({ text, onFileUploaded, googleCreds }) => {
+  console.log(googleCreds);
   const [file, setFile] = useState<File | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +28,15 @@ const FileUpload: React.FC<DefaultTextProps> = ({ text, onFileUploaded }) => {
 
   const handleUpload = async (): Promise<string | null> => {
     if (!file) return null;
+
+    app.options.apiKey = googleCreds.apiKey;
+    app.options.authDomain = googleCreds.authDomain;
+    app.options.projectId = googleCreds.projectId;
+    app.options.storageBucket = googleCreds.storageBucket;
+    app.options.messagingSenderId = googleCreds.messagingSenderId;
+    app.options.appId = googleCreds.appId;
+
+    console.log(app);
 
     const storageInstance = getStorage(app);
     const storageRef = ref(storageInstance, 'uploads/' + file.name);

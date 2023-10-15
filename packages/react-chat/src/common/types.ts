@@ -18,6 +18,7 @@ export interface RuntimeOptions<Verify extends AuthVerify | PublicVerify = AuthV
     | undefined;
   userID?: string;
   versionID?: string | undefined;
+  serverID: string | undefined;
 }
 
 export enum SessionStatus {

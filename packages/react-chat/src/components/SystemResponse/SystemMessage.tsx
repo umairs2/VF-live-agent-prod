@@ -65,7 +65,7 @@ const SystemMessage: React.FC<SystemMessageProps> = ({ avatar, feedback, timesta
               .with({ type: MessageType.IMAGE }, ({ url }) => <Image image={url} />)
               .with({ type: MessageType.CARD }, (props) => <Card {...R.omit(props, ['type'])} />)
               .with({ type: MessageType.CARD }, (props) => <Card {...R.omit(props, ['type'])} />)
-              .with({ type: CustomMessage.FILE_UPLOAD }, ({ text }) => <FileUpload text={'Last opp fil'} />)
+              .with({ type: CustomMessage.FILE_UPLOAD }, ({ text, googleCreds }) => <FileUpload text={'Last opp fil'} googleCreds={googleCreds} />)
               .with({ type: MessageType.CAROUSEL }, (props) => (
                 <Carousel {...R.omit(props, ['type'])} containerRef={containerRef} controlsRef={controlsRef} />
               ))

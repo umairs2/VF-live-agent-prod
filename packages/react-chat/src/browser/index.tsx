@@ -18,6 +18,7 @@ const root = createRoot(rootEl);
 const fetchAssistant: Listeners.MessageListener<PostMessage.Type.FETCH_ASSISTANT> = {
   type: PostMessage.Type.FETCH_ASSISTANT,
   action: async ({ payload }) => {
+    console.log(payload);
     const assistant = await mergeAssistant(payload);
     ChatWidget.sendMessage({ type: PostMessage.Type.FETCHED_ASSISTANT, payload: assistant });
   },

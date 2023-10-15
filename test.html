@@ -12,13 +12,12 @@
           s = d.getElementsByTagName(t)[0];
         v.onload = function () {
           window.voiceflow.chat.load({
-            verify: { projectID: "64f5bfae99d6da00085c9733" },
+            verify: { projectID: "" },
             url: "https://general-runtime.voiceflow.com",
             versionID: "production",
           });
         };
-        v.src =
-          "https://sindrimt.github.io/custom-if-voiceflow/packages/widget/dist/bundle.mjs";
+        v.src = "";
         v.type = "text/javascript";
         s.parentNode.insertBefore(v, s);
       })(document, "script");
