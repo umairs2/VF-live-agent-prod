@@ -101,13 +101,13 @@ const Chat: React.FC<ChatProps> = ({
         title={title}
         image={image}
         actions={[
-          { svg: 'settings', onClick: handleOpenSettings },
+          // { svg: 'settings', onClick: handleOpenSettings },
           { svg: 'minus', onClick: onMinimize },
           { svg: 'close', onClick: handleClose },
         ]}
       />
       <Dialog ref={dialogRef}>
-        {isSettingsOpen && <SettingsScreen {...{ onStart, handleResume, handleCloseSettings }} />}
+        {/*  {isSettingsOpen && <SettingsScreen {...{ onStart, handleResume, handleCloseSettings }} />} */}
 
         <AutoScrollProvider target={dialogRef}>
           <AssistantInfo title={title} avatar={avatar} description={description} />
