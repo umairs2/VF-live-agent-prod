@@ -14,7 +14,7 @@ import { RuntimeAPIContext } from '@/contexts';
 const SESSION_USER_ID_KEY = 'session:user_id';
 const SESSION_CONVERSATION_ID_KEY = 'session:conversation_id';
 
-const client = new FetchClient({ baseURL: 'http://localhost:9099' });
+const client = new FetchClient({ baseURL: 'https://seilvind-server-voiceflow.onrender.com' });
 
 const createTurn = <Type extends TurnType>(type: Type) => ({
   type,
@@ -67,7 +67,9 @@ export const useLiveAgent = (runtime: any) => {
   };
 
   const subscribeToConversation = (platform: LiveAgentPlatform, userID: string, conversationID: string) => {
-    socketRef.current = new WebSocket(`ws://localhost:9099/${platform}/user/${userID}/conversation/${conversationID}/socket`);
+     socketRef.current = new WebSocket(
+      `wss://seilvind-server-voiceflow.onrender.com/${platform}/user/${userID}/conversation/${conversationID}/socket`
+    );
     socketRef.current.onmessage = (message) => {
       const event = JSON.parse(message.data);
 
