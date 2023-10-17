@@ -27,12 +27,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ id, onSend, isLiveAgentEnabled, o
 
   return (
     <Container>
-      {isLiveAgentEnabled && (
+      {/* {isLiveAgentEnabled && (
         <FileInputLabel>
           <FileInput type="file" onChange={onFileChange} accept="image/*" />
           <AttachmentIcon src={attachment} alt="attachment" />
         </FileInputLabel>
-      )}
+      )} */}
       <Input id={internalID} onKeyPress={handleKeyPress} {...props} />
       <ButtonContainer htmlFor={internalID} withContent={!!props.value}>
         <Bubble size="small" svg="smallArrowUp" onClick={onSend} />
