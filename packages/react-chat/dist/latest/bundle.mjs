@@ -51576,7 +51576,7 @@ const Uw = "session:user_id", L1e = "session:conversation_id", $w = new Qm({ bas
       `wss://seilvind-server-voiceflow.onrender.com/${T}/user/${_}/conversation/${w}/socket`
     ), t.current.onmessage = (A) => {
       const O = JSON.parse(A.data);
-      n0(O).with({ type: Ev.LIVE_AGENT_MESSAGE }, () => c(O.data.message)).with({ type: Ev.LIVE_AGENT_CONNECT }, () => c(`connecting you with ${O.data.agent.name}`)).with({ type: Ev.LIVE_AGENT_DISCONNECT }, () => {
+      n0(O).with({ type: Ev.LIVE_AGENT_CONNECT }, () => c(`connecting you with ${O.data.agent.name}`)).with({ type: Ev.LIVE_AGENT_MESSAGE }, () => c(O.data.message)).with({ type: Ev.LIVE_AGENT_DISCONNECT }, () => {
         c(`${O.data.agent.name} has left the chat`), p();
       }).otherwise(() => console.log("unexpected event", O));
     };

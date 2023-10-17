@@ -31230,7 +31230,7 @@ const q9 = "session:user_id", Iz = "session:conversation_id", X9 = new Ra({ base
       `wss://seilvind-server-voiceflow.onrender.com/${f}/user/${h}/conversation/${E}/socket`
     ), t.current.onmessage = (m) => {
       const p = JSON.parse(m.data);
-      ka(p).with({ type: Ns.LIVE_AGENT_MESSAGE }, () => a(p.data.message)).with({ type: Ns.LIVE_AGENT_CONNECT }, () => a(`connecting you with ${p.data.agent.name}`)).with({ type: Ns.LIVE_AGENT_DISCONNECT }, () => {
+      ka(p).with({ type: Ns.LIVE_AGENT_CONNECT }, () => a(`connecting you with ${p.data.agent.name}`)).with({ type: Ns.LIVE_AGENT_MESSAGE }, () => a(p.data.message)).with({ type: Ns.LIVE_AGENT_DISCONNECT }, () => {
         a(`${p.data.agent.name} has left the chat`), o();
       }).otherwise(() => console.log("unexpected event", p));
     };

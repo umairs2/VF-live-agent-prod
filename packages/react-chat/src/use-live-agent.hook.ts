@@ -74,8 +74,8 @@ export const useLiveAgent = (runtime: any) => {
       const event = JSON.parse(message.data);
 
       match(event)
-        .with({ type: SocketEvent.LIVE_AGENT_MESSAGE }, () => addSystemMessage(event.data.message))
         .with({ type: SocketEvent.LIVE_AGENT_CONNECT }, () => addSystemMessage(`connecting you with ${event.data.agent.name}`))
+        .with({ type: SocketEvent.LIVE_AGENT_MESSAGE }, () => addSystemMessage(event.data.message))
         .with({ type: SocketEvent.LIVE_AGENT_DISCONNECT }, () => {
           addSystemMessage(`${event.data.agent.name} has left the chat`);
           talkToRobot();
