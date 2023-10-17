@@ -8,9 +8,9 @@ const LiveAgentStatus = ({ talkToRobot }: any) => {
 
   return (
     <Container>
-      {t('talking_to_agent')}{' '}
+      {'You are talking to an agent. Return to robot'}{' '}
       <a onClick={talkToRobot} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
-        {t('here')}
+        {'Here'}
       </a>{' '}
     </Container>
   );
