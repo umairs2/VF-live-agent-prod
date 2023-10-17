@@ -18,8 +18,8 @@ log/
 !.yarn/versions
 
 # build folders
-build
-dist
+# build
+# dist
 
 # docs
 docs
