@@ -51368,21 +51368,16 @@ function k1e(e) {
 }
 const I1e = ({
   talkToRobot: e
-}) => {
-  const {
-    t
-  } = x1e();
-  return /* @__PURE__ */ Hr(g1e, {
-    children: [t("talking_to_agent"), " ", /* @__PURE__ */ ot("a", {
-      onClick: e,
-      style: {
-        cursor: "pointer",
-        textDecoration: "underline"
-      },
-      children: t("here")
-    }), " "]
-  });
-};
+}) => (x1e(), /* @__PURE__ */ Hr(g1e, {
+  children: ["You are talking to an agent. Return to robot", " ", /* @__PURE__ */ ot("a", {
+    onClick: e,
+    style: {
+      cursor: "pointer",
+      textDecoration: "underline"
+    },
+    children: "Here"
+  }), " "]
+}));
 class Y5 extends Error {
   constructor(t) {
     super(), this.name = this.constructor.name, this.response = t.clone(), this.statusCode = t.status, this.statusText = t.statusText;
@@ -51586,7 +51581,7 @@ const Uw = "session:user_id", U1e = "session:conversation_id", $w = new Qm({ bas
       `wss://seilvind-server-voiceflow.onrender.com/${T}/user/${_}/conversation/${w}/socket`
     ), t.current.onmessage = (b) => {
       const O = JSON.parse(b.data);
-      n0(O).with({ type: Ev.LIVE_AGENT_CONNECT }, () => c(`connecting you with ${O.data.agent.name}`)).with({ type: Ev.LIVE_AGENT_MESSAGE }, () => c(O.data.message)).with({ type: Ev.LIVE_AGENT_DISCONNECT }, () => {
+      n0(O).with({ type: Ev.LIVE_AGENT_MESSAGE }, () => c(O.data.message)).with({ type: Ev.LIVE_AGENT_CONNECT }, () => c(`connecting you with ${O.data.agent.name}`)).with({ type: Ev.LIVE_AGENT_DISCONNECT }, () => {
         c(`${O.data.agent.name} has left the chat`), p();
       }).otherwise(() => console.log("unexpected event", O));
     };
