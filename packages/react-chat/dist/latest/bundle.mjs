@@ -51548,7 +51548,7 @@ class Qm {
   }
 }
 var Ev = /* @__PURE__ */ ((e) => (e.LIVE_AGENT_CONNECT = "live_agent.connect", e.LIVE_AGENT_DISCONNECT = "live_agent.disconnect", e.LIVE_AGENT_MESSAGE = "live_agent.message", e.USER_MESSAGE = "user.message", e))(Ev || {});
-const Uw = "session:user_id", L1e = "session:conversation_id", $w = new Qm({ baseURL: "https://seilvind-server-voiceflow.onrender.com" }), Hw = (e) => ({
+const Uw = "session:user_id", L1e = "session:conversation_id", $w = new Qm({ baseURL: "https://funding-pips-live-agent.onrender.com" }), Hw = (e) => ({
   type: e,
   id: `${Math.random()}-${Date.now()}`,
   timestamp: Date.now()
@@ -51573,7 +51573,7 @@ const Uw = "session:user_id", L1e = "session:conversation_id", $w = new Qm({ bas
     s(!1), c("Returning you to the Voiceflow bot..."), f();
   }, m = (T, _, w) => {
     t.current = new WebSocket(
-      `wss://seilvind-server-voiceflow.onrender.com/${T}/user/${_}/conversation/${w}/socket`
+      `wss://funding-pips-live-agent.onrender.com/${T}/user/${_}/conversation/${w}/socket`
     ), t.current.onmessage = (A) => {
       const O = JSON.parse(A.data);
       n0(O).with({ type: Ev.LIVE_AGENT_CONNECT }, () => c(`connecting you with ${O.data.agent.name}`)).with({ type: Ev.LIVE_AGENT_MESSAGE }, () => c(O.data.message)).with({ type: Ev.LIVE_AGENT_DISCONNECT }, () => {
